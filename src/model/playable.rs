@@ -26,6 +26,13 @@ impl Playable {
         }
     }
 
+    pub fn title(&self) -> String {
+        match self {
+            Playable::Track(track) => track.title.clone(),
+            Playable:: Episode(episode) => episode.name.clone(),
+        }
+    }
+
     pub fn uri(&self) -> String {
         match self {
             Playable::Track(track) => track.uri.clone(),
@@ -37,6 +44,13 @@ impl Playable {
         match self {
             Playable::Track(track) => track.cover_url.clone(),
             Playable::Episode(episode) => episode.cover_url.clone(),
+        }
+    }
+
+    pub fn artists_list(&self) -> String {
+        match self {
+            Playable::Track(track) => track.artists.join(", "),
+            Playable::Episode(episode) => episode.description.clone(),
         }
     }
 

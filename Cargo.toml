@@ -77,7 +77,7 @@ pancurses_backend = ["cursive/pancurses-backend", "pancurses/win32"]
 mpris = ["dbus", "dbus-tree"]
 notify = ["notify-rust"]
 cover = ["ioctl-rs"]
-default = ["share_clipboard", "pulseaudio_backend", "mpris", "notify", "pancurses_backend"]
+default = ["share_clipboard", "pulseaudio_backend", "mpris", "notify", "pancurses_backend", "cover"]
 
 [package.metadata.deb]
 depends = "$auto, pulseaudio"

@@ -269,9 +269,10 @@ impl Queue {
             #[cfg(feature = "notify")]
             if self.cfg.values().notify.unwrap_or(false) {
                 std::thread::spawn({
-                    let track_name = track.to_string();
+                    let track_name = track.title();
                     let cover_url = track.cover_url();
-                    move || send_notification(&track_name, cover_url)
+                    let track_body = track.artists_list();
+                    move || send_notification(&track_name, &track_body, cover_url)
                 });
             }
         }
@@ -411,7 +412,7 @@ impl Queue {
 }
 
 #[cfg(feature = "notify")]
-pub fn send_notification(track_name: &str, _cover_url: Option<String>) {
+pub fn send_notification(track_name: &str, body: &str, _cover_url: Option<String>) {
     let res = if let Some(u) = _cover_url {
         // download album cover image
         let path = crate::utils::cache_path_for_url(u.to_string());
@@ -424,10 +425,12 @@ pub fn send_notification(track_name: &str, _cover_url: Option<String>) {
 
         Notification::new()
             .summary(track_name)
+            .body(body)
             .icon(path.to_str().unwrap())
+            .urgency(notify_rust::Urgency::Low)
             .show()
     } else {
-        Notification::new().summary(track_name).show()
+        Notification::new().summary(track_name).body(body).show()
     };
 
     if let Err(e) = res {
